@@ -27,9 +27,13 @@ program test_set_activation_function
   net = network_type([1, 1, 1, 1, 1])
 
   do n = 1, size(net % layers)
+    !print *, 'n: ', n, ', sigmoid: ', sigmoid(x)
+    !print *, 'act: ', net % layers(n) % activation(x)
+    !stop 'here'
     tests = [tests, all(sigmoid(x) == net % layers(n) % activation(x))]
     tests = [tests, all(sigmoid_prime(x) == net % layers(n) % activation_prime(x))]
   end do
+
 
   ! now set the various functions for other layers
   call net % layers(2) % set_activation('gaussian')
