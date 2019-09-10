@@ -9,7 +9,12 @@ module mod_layer
   implicit none
 
   private
+
+#ifdef CUDA
+  public :: array1d, array2d, db_init, dw_init, layer_type
+#else
   public :: array1d, array2d, db_init, db_co_sum, dw_init, dw_co_sum, layer_type
+#endif
 
   type :: layer_type
     real(rk), allocatable :: a(:) ! activations
@@ -98,6 +103,8 @@ contains
     dw(n) = array2d([dims(n), 1])
   end subroutine dw_init
 
+#ifndef CUDA
+
   subroutine db_co_sum(db)
     ! Performs a collective sum of bias tendencies.
     type(array1d), allocatable, intent(in out) :: db(:)
@@ -115,6 +122,8 @@ contains
       call co_sum(dw(n) % array)
     end do
   end subroutine dw_co_sum
+
+#endif
 
   pure elemental subroutine set_activation(self, activation)
     ! Sets the activation function. Input string must match one of

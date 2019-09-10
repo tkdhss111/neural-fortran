@@ -28,10 +28,15 @@ program example_mnist
   batch_size = 1000
   num_epochs = 10
 
+#ifdef CUDA
+    write(*, '(a,f5.2,a)') 'Initial accuracy: ',&
+      net % accuracy(te_images, label_digits(te_labels)) * 100, ' %'
+#else
   if (this_image() == 1) then
     write(*, '(a,f5.2,a)') 'Initial accuracy: ',&
       net % accuracy(te_images, label_digits(te_labels)) * 100, ' %'
   end if
+#endif
 
   epochs: do n = 1, num_epochs
     mini_batches: do i = 1, size(tr_labels) / batch_size
@@ -50,10 +55,15 @@ program example_mnist
 
     end do mini_batches
 
+#ifdef CUDA
+    write(*, '(a,i2,a,f5.2,a)') 'Epoch ', n, ' done, Accuracy: ',&
+      net % accuracy(te_images, label_digits(te_labels)) * 100, ' %'
+#else
     if (this_image() == 1) then
       write(*, '(a,i2,a,f5.2,a)') 'Epoch ', n, ' done, Accuracy: ',&
         net % accuracy(te_images, label_digits(te_labels)) * 100, ' %'
     end if
+#endif
 
   end do epochs
 

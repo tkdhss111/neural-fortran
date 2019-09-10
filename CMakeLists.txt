@@ -64,6 +64,13 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES Cray)
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
 endif()
 
+# compiler flags for PGI Fortran
+if(CMAKE_Fortran_COMPILER_ID MATCHES PGI)
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -cpp -DCUDA -Mlarge_arrays -fastsse -Mcuda -Minfo -lcublas")
+  set(CMAKE_Fortran_FLAGS_DEBUG "-O0 -g -Mbounds")
+  set(CMAKE_Fortran_FLAGS_RELEASE "-O4")
+endif()
+
 # library to archive (libneural.a)
 add_library(neural src/lib/mod_activation.f90 src/lib/mod_io.f90 src/lib/mod_kinds.f90 src/lib/mod_layer.f90 src/lib/mod_mnist.f90 src/lib/mod_network.f90 src/lib/mod_parallel.f90 src/lib/mod_random.f90)
 

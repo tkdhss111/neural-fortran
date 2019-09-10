@@ -224,7 +224,13 @@ contains
     class(network_type), intent(in out) :: self
     integer(ik), intent(in) :: image
     integer(ik) :: n
+
+#ifdef CUDA
+    return
+#else
     if (num_images() == 1) return
+#endif
+
     layers: do n = 1, size(self % dims)
       call co_broadcast(self % layers(n) % b, image)
       call co_broadcast(self % layers(n) % w, image)
@@ -262,10 +268,12 @@ contains
       end do
     end do
 
+#ifndef CUDA
     if (num_images() > 1) then
       call dw_co_sum(dw_batch)
       call db_co_sum(db_batch)
     end if
+#endif
 
     call self % update(dw_batch, db_batch, eta / im)
 

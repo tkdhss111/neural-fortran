@@ -8,6 +8,19 @@ module mod_parallel
 
 contains
 
+#ifdef CUDA
+
+  pure function tile_indices(dims)
+
+    integer(ik), intent(in) :: dims
+    integer(ik) :: tile_indices(2)
+
+    tile_indices = [1, dims]
+
+  end function tile_indices
+
+#else
+
   pure function tile_indices(dims)
     ! Given input global array size, return start and end index
     ! of a parallel 1-d tile that correspond to this image.
@@ -29,5 +42,7 @@ contains
     end if
 
   end function tile_indices
+
+#endif
 
 end module mod_parallel
