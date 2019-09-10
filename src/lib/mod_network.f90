@@ -1,8 +1,13 @@
 module mod_network
 
   use mod_kinds, only: ik, rk
-  use mod_layer, only: array1d, array2d, db_init, dw_init,&
-                       db_co_sum, dw_co_sum, layer_type
+
+#ifdef CUDA
+  use mod_layer, only: array1d, array2d, db_init, dw_init, layer_type
+#else
+  use mod_layer, only: array1d, array2d, db_init, dw_init, db_co_sum, dw_co_sum, layer_type
+#endif
+
   use mod_parallel, only: tile_indices
 
   implicit none
@@ -229,12 +234,13 @@ contains
     return
 #else
     if (num_images() == 1) return
-#endif
 
     layers: do n = 1, size(self % dims)
       call co_broadcast(self % layers(n) % b, image)
       call co_broadcast(self % layers(n) % w, image)
     end do layers
+#endif
+
   end subroutine sync
 
   subroutine train_batch(self, x, y, eta)
