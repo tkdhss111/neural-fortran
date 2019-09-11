@@ -1,8 +1,8 @@
 EXE      := cuda_test
-#SRCS     := test_cublas.f90
-SRCS     := mod_kinds.f90 mod_io.f90 mod_activation.f90 mod_random.f90
-SRCS     += mod_layer.f90 mod_mnist.f90 mod_parallel.f90 mod_network.f90
-SRCS     += test_set_activation_function.f90
+SRCS     := test_cublas.f90
+#SRCS     := mod_kinds.f90 mod_io.f90 mod_activation.f90 mod_random.f90
+#SRCS     += mod_layer.f90 mod_mnist.f90 mod_parallel.f90 mod_network.f90
+#SRCS     += test_set_activation_function.f90
 VPATH    := ../lib ../tests/
 
 DIR_PROJS     := /home/jma/1_Projects/
